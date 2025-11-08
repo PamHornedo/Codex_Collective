@@ -2,8 +2,11 @@ import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Layout } from './components/Layout';
-import { ProtectedRoute } from './components/ProtectedRoute';
-import { useUserStore, useBooksStore, useFeedStore } from './store';
+import { ProtectedRoute } from './components/Protectedroute';
+import { useBooksStore } from './store/books';
+import { useUserStore } from './store/user';
+import { useFeedStore } from './store/feed';
+
 import {
   LoginPage,
   DashboardPage,

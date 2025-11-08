@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useUserStore } from '../store';
+import { useUserStore } from '../store/user';
 
 // ✅ Define selectors outside component for consistency
 const selectUser = (state: ReturnType<typeof useUserStore.getState>) => state.user;

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/useDebounce';
 import { searchBooks } from '../services/googleBooks';
-import { useBooksStore } from '../store';
+import { useBooksStore } from '../store/books';
 import { BookCard } from '../components/BookCard';
 import type { Book } from '../types';
 
