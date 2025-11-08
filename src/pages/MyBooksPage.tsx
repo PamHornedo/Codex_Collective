@@ -15,7 +15,7 @@ import {
   sortableKeyboardCoordinates,
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
-import { useBooksStore } from '../store';
+import { useBooksStore } from '../store/books';
 import { BookCard } from '../components/BookCard';
 import type { Book, BookStatus } from '../types';
 

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useFeedStore, useUserStore } from '../store';
+import { useFeedStore } from '../store/feed';
+import { useUserStore } from '../store/user';
 import type { FeedPost } from '../types';
 
 // ✅ Define selectors outside component to prevent re-renders

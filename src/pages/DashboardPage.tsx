@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserStore, useBooksStore } from '../store';
+import { useUserStore } from '../store/user';
+import { useBooksStore } from '../store/books';
 import { BookCard } from '../components/BookCard';
 import { ReadingProgress } from '../components/ReadingProgress';
 import { searchBooks } from '../services/googleBooks';

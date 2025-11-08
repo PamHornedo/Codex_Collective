@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useBooksStore } from '../store';
+import { useBooksStore } from '../store/books';
 import { getBookById } from '../services/googleBooks';
 import type { Book, BookStatus } from '../types';
 

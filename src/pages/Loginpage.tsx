@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserStore } from '../store';
+import { useUserStore } from '../store/user';
 
 // ✅ Define selector outside component to prevent re-renders
 const selectLogin = (state: ReturnType<typeof useUserStore.getState>) => state.login;
