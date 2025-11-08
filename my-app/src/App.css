@@ -1,42 +1,83 @@
+/* Root app container - full height layout */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Responsive breakpoints and utilities */
+@media (max-width: 768px) {
+  /* Mobile-specific adjustments */
+  .container {
+    padding: 1rem;
   }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Tablet-specific adjustments */
+  .container {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  /* Desktop-specific adjustments */
+  .container {
+    padding: 2rem;
+  }
+}
+
+/* Smooth transitions for interactive elements */
+button,
+a,
+.card {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Focus visible for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Card hover effects */
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading spinner */
+.spinner {
+  border: 3px solid rgba(46, 139, 87, 0.3);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Error message styles */
+.error-message {
+  color: #e53e3e;
+  background-color: #fff5f5;
+  border: 1px solid #fc8181;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  margin: 1rem 0;
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+/* Success message styles */
+.success-message {
+  color: var(--color-primary);
+  background-color: #f0fff4;
+  border: 1px solid var(--color-primary);
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  margin: 1rem 0;
 }

@@ -1,20 +1,92 @@
-import { Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/DashboardPage";
-import Browse from "./pages/BrowsePage";
-import MyBooks from "./pages/MyBooksPage";
-import Feed from "./pages/FeedPage";
-import BookDetails from "./pages/BookDetailsPage";
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { Layout } from './components/Layout';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { useUserStore, useBooksStore, useFeedStore } from './store';
+import {
+  LoginPage,
+  DashboardPage,
+  BrowsePage,
+  MyBooksPage,
+  BookDetailsPage,
+  FeedPage,
+} from './pages';
 
 function App() {
+  // Initialize all stores on app mount (proper React way - prevents infinite loops)
+  useEffect(() => {
+    useUserStore.getState().loadUser();
+    useBooksStore.getState().loadBooks();
+    useFeedStore.getState().loadFeed();
+  }, []);
+
+  // Use basename only in production for GitHub Pages
+  const basename = import.meta.env.PROD ? '/Codex_Collective' : '/';
+
   return (
+    <ErrorBoundary>
+      <BrowserRouter basename={basename}>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/browse" element={<Browse />} />
-        <Route path="/mybooks" element={<MyBooks />} />
-        <Route path="/feed" element={<Feed />} />
-        <Route path="/bookdetails" element={<BookDetails />} />
+        {/* Public route */}
+        <Route path="/login" element={<LoginPage />} />
+
+        {/* Protected routes */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <DashboardPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/browse"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <BrowsePage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/my-books"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <MyBooksPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/book/:id"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <BookDetailsPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/feed"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <FeedPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
       </Routes>
-  );
+      </BrowserRouter>
+    </ErrorBoundary>
+  )
 }
 
-export default App;
+export default App
+

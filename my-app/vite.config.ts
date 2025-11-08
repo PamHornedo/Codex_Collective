@@ -1,7 +1,9 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-export default defineConfig({
+// https://vite.dev/config/
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
-  base: "/Codex_Collective/"
-});
+  // Use base path for GitHub Pages in production, root path for dev
+  base: mode === 'production' ? '/Codex_Collective/' : '/',
+}))
