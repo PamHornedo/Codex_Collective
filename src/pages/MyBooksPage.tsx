@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   DndContext,
@@ -21,25 +21,31 @@ import type { Book, BookStatus } from '../types';
 
 type TabType = 'want-to-read' | 'currently-reading' | 'read';
 
-// ✅ Define selectors outside component to prevent re-renders
-const selectWantToRead = (state: ReturnType<typeof useBooksStore.getState>) =>
-  state.getBooksByStatus('want-to-read');
-const selectCurrentlyReading = (state: ReturnType<typeof useBooksStore.getState>) =>
-  state.getBooksByStatus('currently-reading');
-const selectRead = (state: ReturnType<typeof useBooksStore.getState>) =>
-  state.getBooksByStatus('read');
-const selectUpdateBookStatus = (state: ReturnType<typeof useBooksStore.getState>) =>
-  state.updateBookStatus;
-
 export function MyBooksPage() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabType>('want-to-read');
   const [activeBook, setActiveBook] = useState<Book | null>(null);
 
-  const wantToReadBooks = useBooksStore(selectWantToRead);
-  const currentlyReadingBooks = useBooksStore(selectCurrentlyReading);
-  const readBooks = useBooksStore(selectRead);
-  const updateBookStatus = useBooksStore(selectUpdateBookStatus);
+  // ✅ NEW APPROACH: Get books array ONCE from Zustand, filter with useMemo
+  // This prevents infinite loops by letting React control memoization
+  const books = useBooksStore((state) => state.books);
+  const updateBookStatus = useBooksStore((state) => state.updateBookStatus);
+
+  // Filter books using useMemo - only recalculates when books array changes
+  const wantToReadBooks = useMemo(
+    () => books.filter((book) => book.status === 'want-to-read'),
+    [books]
+  );
+  
+  const currentlyReadingBooks = useMemo(
+    () => books.filter((book) => book.status === 'currently-reading'),
+    [books]
+  );
+  
+  const readBooks = useMemo(
+    () => books.filter((book) => book.status === 'read'),
+    [books]
+  );
 
   // Configure sensors for drag and drop
   const sensors = useSensors(
