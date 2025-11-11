@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ErrorBoundary } from './components/ErrorBoundary';
-import { Layout } from './components/Layout';
-import { ProtectedRoute } from './components/Protectedroute';
+import { ErrorBoundary, Layout, ProtectedRoute } from './components';
 import { useUserStore, useBooksStore, useFeedStore } from './store';
 import {
   LoginPage,
