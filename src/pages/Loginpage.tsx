@@ -6,7 +6,7 @@ import { useUserStore } from '../store/user';
 // ✅ Define selector outside component to prevent re-renders
 const selectLogin = (state: ReturnType<typeof useUserStore.getState>) => state.login;
 
-export function LoginPage() {
+export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
