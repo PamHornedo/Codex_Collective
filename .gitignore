@@ -25,3 +25,4 @@ dist-ssr
 
 #Protect API key
 .env
+.env.local
