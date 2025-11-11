@@ -4,3 +4,5 @@ export { Navbar } from './Navbar';
 export { Footer } from './Footer';
 export { BookCard } from './BookCard';
 export { ReadingProgress } from './ReadingProgress';
+export { ProtectedRoute } from './ProtectedRoute';
+export { ErrorBoundary } from './ErrorBoundary';
