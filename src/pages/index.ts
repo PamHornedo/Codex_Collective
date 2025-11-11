@@ -1,5 +1,5 @@
 // Barrel export file for all page components
-export { LoginPage } from './LoginPage';
+export { default as LoginPage } from './LoginPage';
 export { DashboardPage } from './DashboardPage';
 export { BrowsePage } from './BrowsePage';
 export { MyBooksPage } from './MyBooksPage';
