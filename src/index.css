@@ -1,15 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #2E8B57;      /* Teal branding */
-  --color-accent: #FF6B9D;       /* Pink/coral interactive */
-  --color-bg: #F5F5F5;           /* Neutral pastel */
-  --color-card: #FFFFFF;
+  --color-primary: #2e8b57; /* Teal branding */
+  --color-accent: #3a4664; /* Navy interactive */
+  --color-bg: #b2d8d8; /* Light Teal */
+  --color-card: #ffffff;
 }
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
   background-color: var(--color-bg);
   color: #333;
   min-height: 100vh;
@@ -28,7 +36,8 @@ body {
 }
 
 @keyframes shake {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateX(0);
   }
   25% {
@@ -138,7 +147,8 @@ img[loading="lazy"] {
     --color-primary: #1a5c3a;
   }
 
-  button, a {
+  button,
+  a {
     text-decoration: underline;
   }
 }
