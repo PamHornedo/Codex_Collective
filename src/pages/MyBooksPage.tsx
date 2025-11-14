@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   DndContext,
   DragOverlay,
@@ -8,22 +8,24 @@ import {
   useSensor,
   useSensors,
   closestCorners,
-} from '@dnd-kit/core';
-import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
+  useDroppable,
+} from "@dnd-kit/core";
+import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 import {
   SortableContext,
   sortableKeyboardCoordinates,
   rectSortingStrategy,
-} from '@dnd-kit/sortable';
-import { useBooksStore } from '../store/books';
-import { BookCard } from '../components/BookCard';
-import type { Book, BookStatus } from '../types';
+} from "@dnd-kit/sortable";
+import { useBooksStore } from "../store/books";
+import { BookCard } from "../components/BookCard";
+import { SortableBook } from "../components/SortableBook";
+import type { Book, BookStatus } from "../types";
 
-type TabType = 'want-to-read' | 'currently-reading' | 'read';
+type TabType = "want-to-read" | "currently-reading" | "read";
 
 export function MyBooksPage() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<TabType>('want-to-read');
+  const [activeTab, setActiveTab] = useState<TabType>("want-to-read");
   const [activeBook, setActiveBook] = useState<Book | null>(null);
 
   // ✅ NEW APPROACH: Get books array ONCE from Zustand, filter with useMemo
@@ -33,17 +35,17 @@ export function MyBooksPage() {
 
   // Filter books using useMemo - only recalculates when books array changes
   const wantToReadBooks = useMemo(
-    () => books.filter((book) => book.status === 'want-to-read'),
+    () => books.filter((book) => book.status === "want-to-read"),
     [books]
   );
-  
+
   const currentlyReadingBooks = useMemo(
-    () => books.filter((book) => book.status === 'currently-reading'),
+    () => books.filter((book) => book.status === "currently-reading"),
     [books]
   );
-  
+
   const readBooks = useMemo(
-    () => books.filter((book) => book.status === 'read'),
+    () => books.filter((book) => book.status === "read"),
     [books]
   );
 
@@ -60,22 +62,65 @@ export function MyBooksPage() {
   );
 
   const tabs: Array<{ id: TabType; label: string; count: number }> = [
-    { id: 'want-to-read', label: 'Want to Read', count: wantToReadBooks.length },
     {
-      id: 'currently-reading',
-      label: 'Currently Reading',
+      id: "want-to-read",
+      label: "Want to Read",
+      count: wantToReadBooks.length,
+    },
+    {
+      id: "currently-reading",
+      label: "Currently Reading",
       count: currentlyReadingBooks.length,
     },
-    { id: 'read', label: 'Read', count: readBooks.length },
+    { id: "read", label: "Read", count: readBooks.length },
   ];
+
+  function TabButton({
+    tab,
+    onClick,
+  }: {
+    tab: { id: TabType; label: string; count: number };
+    onClick: () => void;
+  }) {
+    const { setNodeRef, isOver } = useDroppable({ id: tab.id });
+
+    return (
+      <button
+        ref={setNodeRef}
+        onClick={onClick}
+        className={`
+                    whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors
+                    focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded-t
+                    ${
+                      activeTab === tab.id
+                        ? "border-teal-600 text-teal-600"
+                        : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                    }
+                    ${isOver ? "bg-teal-50" : ""}
+                  `}
+        aria-current={activeTab === tab.id ? "page" : undefined}
+      >
+        {tab.label}
+        <span
+          className={`ml-2 py-0.5 px-2 rounded-full text-xs ${
+            activeTab === tab.id
+              ? "bg-teal-100 text-teal-600"
+              : "bg-gray-100 text-gray-600"
+          }`}
+        >
+          {tab.count}
+        </span>
+      </button>
+    );
+  }
 
   const getCurrentBooks = (): Book[] => {
     switch (activeTab) {
-      case 'want-to-read':
+      case "want-to-read":
         return wantToReadBooks;
-      case 'currently-reading':
+      case "currently-reading":
         return currentlyReadingBooks;
-      case 'read':
+      case "read":
         return readBooks;
     }
   };
@@ -99,7 +144,7 @@ export function MyBooksPage() {
     const targetStatus = over.id as BookStatus;
 
     // Update book status if it's a valid drop zone
-    if (['want-to-read', 'currently-reading', 'read'].includes(targetStatus)) {
+    if (["want-to-read", "currently-reading", "read"].includes(targetStatus)) {
       updateBookStatus(bookId, targetStatus);
     }
 
@@ -130,33 +175,16 @@ export function MyBooksPage() {
         {/* Tabs */}
         <section>
           <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8" aria-label="Book status tabs">
+            <nav
+              className="-mb-px flex space-x-8"
+              aria-label="Book status tabs"
+            >
               {tabs.map((tab) => (
-                <button
+                <TabButton
                   key={tab.id}
+                  tab={tab}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`
-                    whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors
-                    focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded-t
-                    ${
-                      activeTab === tab.id
-                        ? 'border-teal-600 text-teal-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    }
-                  `}
-                  aria-current={activeTab === tab.id ? 'page' : undefined}
-                >
-                  {tab.label}
-                  <span
-                    className={`ml-2 py-0.5 px-2 rounded-full text-xs ${
-                      activeTab === tab.id
-                        ? 'bg-teal-100 text-teal-600'
-                        : 'bg-gray-100 text-gray-600'
-                    }`}
-                  >
-                    {tab.count}
-                  </span>
-                </button>
+                />
               ))}
             </nav>
           </div>
@@ -176,13 +204,11 @@ export function MyBooksPage() {
                 aria-label={`${tabs.find((t) => t.id === activeTab)?.label} books`}
               >
                 {getCurrentBooks().map((book) => (
-                  <div
+                  <SortableBook
                     key={book.id}
-                    className="cursor-move touch-none"
+                    book={book}
                     onClick={() => navigate(`/book/${book.id}`)}
-                  >
-                    <BookCard book={book} isDraggable />
-                  </div>
+                  />
                 ))}
               </div>
             ) : (
@@ -208,16 +234,16 @@ export function MyBooksPage() {
                   No books in "{tabs.find((t) => t.id === activeTab)?.label}"
                 </h3>
                 <p className="text-gray-600 max-w-md mx-auto">
-                  {activeTab === 'want-to-read' &&
-                    'Browse our collection and add books you want to read'}
-                  {activeTab === 'currently-reading' &&
-                    'Drag books here when you start reading them'}
-                  {activeTab === 'read' &&
-                    'Drag books here when you finish reading them'}
+                  {activeTab === "want-to-read" &&
+                    "Browse our collection and add books you want to read"}
+                  {activeTab === "currently-reading" &&
+                    "Drag books here when you start reading them"}
+                  {activeTab === "read" &&
+                    "Drag books here when you finish reading them"}
                 </p>
-                {activeTab === 'want-to-read' && (
+                {activeTab === "want-to-read" && (
                   <button
-                    onClick={() => navigate('/browse')}
+                    onClick={() => navigate("/browse")}
                     className="mt-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
                   >
                     Browse Books
@@ -247,10 +273,6 @@ export function MyBooksPage() {
               <div className="flex-1">
                 <p className="text-sm text-blue-800 font-medium">
                   💡 Pro tip: Drag books between tabs to update their status
-                </p>
-                <p className="text-sm text-blue-700 mt-1">
-                  Keyboard users: Press Space to pick up a book, use Arrow keys to
-                  move, and press Space again to drop
                 </p>
               </div>
             </div>

@@ -129,7 +129,7 @@ export function BrowsePage() {
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl bg--color-primary focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
+            className="w-full pl-12 pr-4 py-4 text-lg border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors"
             placeholder="Search by title, author, or ISBN..."
             aria-label="Search for books"
             autoFocus
